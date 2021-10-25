@@ -63,6 +63,7 @@ class DataManager:
             # Visualization
             if visual:
                 msno.matrix(df)
+                plt.subplots_adjust(top=0.75)
                 plt.show()
                 plt.close()
 
@@ -344,8 +345,8 @@ class DataManager:
         X_data = UtilsManager.conv_to_numerical(X_data, Constants.ID_COLUMNS)
 
         # Create detector
-        #detector = LOF(n_neighbors=20, contamination=0.1, n_jobs=-1)
-        detector = HBOS(n_bins=10, alpha=0.1, tol=0.5, contamination=0.1)
+        detector = LOF(n_neighbors=2, contamination=0.01, n_jobs=-1)
+        #detector = HBOS(n_bins=10, alpha=0.1, tol=0.5, contamination=0.02)
 
         # Detect outliers
         detector.fit(X_data)

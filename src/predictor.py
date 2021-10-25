@@ -172,8 +172,16 @@ class PredictorManager:
         """
         Load model
         """
+        # Load
         estimator = joblib.load(path)
 
+        # Info
+        print('\nHyper-parameters set:')
+        hparameters = estimator.get_params()
+        for hparam_name in hparameters:
+            print('\t{}: {}'.format(hparam_name, hparameters[hparam_name]))
+
+        # Evaluation
         if with_eval:
             self.evaluation_supervised(estimator, algorithm, visual=visual)
 
@@ -182,8 +190,8 @@ class PredictorManager:
 
 if __name__ == "__main__":
 
-    optim = True
-    load = False
+    optim = False
+    load = True
 
     predictor = PredictorManager(
         info=False, 
@@ -194,15 +202,15 @@ if __name__ == "__main__":
     if optim:
         predictor.optimize(
             algorithm=Constants.RANDOM_FORSET,
-            n_iters=20,
-            n_folds=3,
+            n_iters=30,
+            n_folds=5,
             with_eval=True,
             visual=False
         )
 
     if load:
         predictor.load_model(
-            path='data/output/RandomForest_1633319603.joblib',
+            path='data/output/RandomForest_1635164664.joblib',
             algorithm=Constants.RANDOM_FORSET,
             with_eval=True,
             visual=True

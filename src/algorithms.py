@@ -81,8 +81,8 @@ class Algorithms:
         # Define workflow
         pipeline = Pipeline([
             ('encode_categ', TargetEncoder(cols=Constants.CATEG_COLUMNS)),
-            ('encode_id', TargetEncoder(cols=Constants.ID_COLUMNS)),
-            #('scaler', StandardScaler()),       # required for PCA
+            ('encode_id', LeaveOneOutEncoder(cols=Constants.ID_COLUMNS)),
+            ('scaler', StandardScaler()),       # required for PCA
             #('pca', PCA()),
             ('kbest', SelectKBest()),
             ('estimator', RandomForestClassifier(verbose=1, n_jobs=-1, warm_start=False))
@@ -92,18 +92,18 @@ class Algorithms:
         hparams = [{
             #'pca__n_components': np.arange(15, 25),                             # desired dimensionality of output data
 
-            'kbest__score_func': [f_classif, mutual_info_classif],            # scoring function for feature selection
+            'kbest__score_func': [f_classif],                               # scoring function for feature selection
             'kbest__k': np.arange(27, 30),                                      # number of feature to select with best score
 
-            'estimator__n_estimators': np.arange(420, 470),                     # the number of trees in the forest
+            'estimator__n_estimators': np.arange(520, 650),                     # the number of trees in the forest
             'estimator__criterion': ['entropy', 'gini'],                        # the function to measure the quality of a split
-            'estimator__max_depth': np.arange(5, 30),                         # the maximum depth of the tree
-            #'estimator__min_samples_split': np.arange(3, 70),                 # the minimum number of samples required to split an internal node
-            #'estimator__min_samples_leaf': np.arange(2, 20),                  # the minimum number of samples required to be at a leaf node
+            #'estimator__max_depth': np.arange(5, 15),                         # the maximum depth of the tree
+            'estimator__min_samples_split': np.arange(300, 600),                 # the minimum number of samples required to split an internal node
+            'estimator__min_samples_leaf': np.arange(320, 670),                  # the minimum number of samples required to be at a leaf node
             'estimator__max_features': ['sqrt', 'log2'],                        # the number of features to consider when looking for the best split
-            'estimator__bootstrap': [False],                              # whether bootstrap samples are used when building trees, if False, the whole dataset is used to build each tree
-            'estimator__max_samples': stats.uniform(0.5, 0.45),                 # if bootstrap is True, the number of samples to draw from X to train each base estimator
-            'estimator__class_weight': ['balanced', 'balanced_subsample', None]
+            'estimator__bootstrap': [True],                              # whether bootstrap samples are used when building trees, if False, the whole dataset is used to build each tree
+            'estimator__max_samples': stats.uniform(0.6, 0.39),                 # if bootstrap is True, the number of samples to draw from X to train each base estimator
+            'estimator__class_weight': ['balanced', 'balanced_subsample']
         }]
 
         return pipeline, hparams
