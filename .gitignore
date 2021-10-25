@@ -127,3 +127,24 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Linux
+bin/
+etc/
+include/
+lib/
+share/
+
+# Windows
+Scripts/
+Include/
+tcl/
+Lib
+
+# Enviroment
+.vscode/
+data/
+src/help
+src/__pycache__
+*.pyc
+*.pyo
